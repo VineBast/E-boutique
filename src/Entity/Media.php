@@ -20,12 +20,7 @@ class Media
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="media")
      */
-    private $Name;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=CommandLine::class, inversedBy="media")
-     */
-    private $OrderNumber;
+    private $NumProduct;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=true)
@@ -47,26 +42,14 @@ class Media
         return $this->id;
     }
 
-    public function getName(): ?Product
+    public function getNumProduct(): ?Product
     {
         return $this->Name;
     }
 
-    public function setName(?Product $Name): self
+    public function setNumProduct(?Product $NumProduct): self
     {
-        $this->Name = $Name;
-
-        return $this;
-    }
-
-    public function getOrderNumber(): ?CommandLine
-    {
-        return $this->OrderNumber;
-    }
-
-    public function setOrderNumber(?CommandLine $OrderNumber): self
-    {
-        $this->OrderNumber = $OrderNumber;
+        $this->NumProduct = $NumProduct;
 
         return $this;
     }

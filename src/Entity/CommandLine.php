@@ -26,7 +26,8 @@ class CommandLine
     private $OrderNumber;
 
     /**
-     * @ORM\Column(type="string", length=40)
+     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $NumProduct;
 
@@ -35,20 +36,9 @@ class CommandLine
      */
     private $Quantity;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="NumProduct")
-     */
-    private $products;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Media::class, mappedBy="OrderNumber")
-     */
-    private $media;
-
     public function __construct()
     {
         $this->products = new ArrayCollection();
-        $this->media = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -73,7 +63,7 @@ class CommandLine
         return $this->NumProduct;
     }
 
-    public function setNumProduct(string $NumProduct): self
+    public function setNumProduct(?Product $NumProduct): self
     {
         $this->NumProduct = $NumProduct;
 
@@ -88,66 +78,6 @@ class CommandLine
     public function setQuantity(string $Quantity): self
     {
         $this->Quantity = $Quantity;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Product>
-     */
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
-
-    public function addProduct(Product $product): self
-    {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
-            $product->setNumProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): self
-    {
-        if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getNumProduct() === $this) {
-                $product->setNumProduct(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Media>
-     */
-    public function getMedia(): Collection
-    {
-        return $this->media;
-    }
-
-    public function addMedium(Media $medium): self
-    {
-        if (!$this->media->contains($medium)) {
-            $this->media[] = $medium;
-            $medium->setOrderNumber($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMedium(Media $medium): self
-    {
-        if ($this->media->removeElement($medium)) {
-            // set the owning side to null (unless already changed)
-            if ($medium->getOrderNumber() === $this) {
-                $medium->setOrderNumber(null);
-            }
-        }
 
         return $this;
     }

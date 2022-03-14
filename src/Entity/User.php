@@ -55,9 +55,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $Phone;
 
     /**
-     * @ORM\OneToMany(targetEntity=CustomerAddress::class, mappedBy="Email")
+     * @ORM\Column(type="string", length=255)
      */
-    private $customerAddresses;
+    private $Address;
+
+    /**
+     * @ORM\Column(type="string", length=40)
+     */
+    private $Cp;
+
+    /**
+     * @ORM\Column(type="string", length=40)
+     */
+    private $City;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $Country;
 
     /**
      * @ORM\OneToMany(targetEntity=Order::class, mappedBy="Email")
@@ -66,7 +81,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->customerAddresses = new ArrayCollection();
         $this->orders = new ArrayCollection();
     }
 
@@ -159,6 +173,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
+    public function __toString(): string
+    {
+        return $this->getEmail();
+    }
+
     public function getName(): ?string
     {
         return $this->Name;
@@ -196,36 +215,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, CustomerAddress>
-     */
-    public function getCustomerAddresses(): Collection
-    {
-        return $this->customerAddresses;
-    }
-
-    public function addCustomerAddress(CustomerAddress $customerAddress): self
-    {
-        if (!$this->customerAddresses->contains($customerAddress)) {
-            $this->customerAddresses[] = $customerAddress;
-            $customerAddress->setEmail($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCustomerAddress(CustomerAddress $customerAddress): self
-    {
-        if ($this->customerAddresses->removeElement($customerAddress)) {
-            // set the owning side to null (unless already changed)
-            if ($customerAddress->getEmail() === $this) {
-                $customerAddress->setEmail(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Order>
      */
     public function getOrders(): Collection
@@ -254,4 +243,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getAddress(): ?string
+    {
+        return $this->Address;
+    }
+
+    public function setAddress(string $Address): self
+    {
+        $this->Address = $Address;
+
+        return $this;
+    }
+
+    public function getCp(): ?string
+    {
+        return $this->Cp;
+    }
+
+    public function setCp(string $Cp): self
+    {
+        $this->Cp = $Cp;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->City;
+    }
+
+    public function setCity(string $City): self
+    {
+        $this->City = $City;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->Country;
+    }
+
+    public function setCountry(string $Country): self
+    {
+        $this->Country = $Country;
+
+        return $this;
+    }
+
 }

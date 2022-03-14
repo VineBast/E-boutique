@@ -1,0 +1,56 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <div class="container shadow-sm">
+        <h2 class="title main-text-color mb-5 mt-5">Panier</h2>
+        {% if items | length > 0 %}
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>NFT</th>
+                    <th>Prix</th>
+                    <th>Quantité</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.product.Name }}</td>
+                    <td>{{ item.product.priceHT }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.product.priceHT * item.quantity }}</td>
+                    <td>
+                        <a href="{{ path('cart_remove', {'id' :item.product.id}) }}" class="btn btn-danger btn-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+                {% endfor %}
+                <tfoot>
+                <tr>
+                    <td class="text-right" colspan="3"></td>
+                    <td>{{ total }}</td>
+                    <td></td>
+                </tr>
+                </tfoot>
+            </table>
+            {% if app.user %}
+                <a href="{{ path("app_order") }}" class="btn main-background-color text-white mb-2">Validate cart</a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="no-deco" title="Sign in">
+                    <button type="button" class="btn btn-light m-2">Sign in to order</button>
+                </a>
+            {% endif %}
+
+        {% else %}
+            <p class="title pb-2">Le panier est vide</p>
+        {% endif %}
+
+    </div>
+{% endblock %}

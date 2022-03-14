@@ -6,6 +6,7 @@ use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * @ORM\Entity(repositoryClass=OrderRepository::class)
@@ -27,7 +28,7 @@ class Order
     private $Email;
 
     /**
-     * @ORM\Column(type="string", length=40)
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $OrderNumber;
 
@@ -68,15 +69,14 @@ class Order
         return $this;
     }
 
-    public function getOrderNumber(): ?string
+    public function getOrderNumber(): ?int
     {
         return $this->OrderNumber;
     }
 
-    public function setOrderNumber(string $OrderNumber): self
+    public function setOrderNumber(int $OrderNumber) : self
     {
         $this->OrderNumber = $OrderNumber;
-
         return $this;
     }
 
@@ -104,33 +104,5 @@ class Order
         return $this;
     }
 
-    /**
-     * @return Collection<int, CommandLine>
-     */
-    public function getCommandLines(): Collection
-    {
-        return $this->commandLines;
-    }
 
-    public function addCommandLine(CommandLine $commandLine): self
-    {
-        if (!$this->commandLines->contains($commandLine)) {
-            $this->commandLines[] = $commandLine;
-            $commandLine->setOrderNumber($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCommandLine(CommandLine $commandLine): self
-    {
-        if ($this->commandLines->removeElement($commandLine)) {
-            // set the owning side to null (unless already changed)
-            if ($commandLine->getOrderNumber() === $this) {
-                $commandLine->setOrderNumber(null);
-            }
-        }
-
-        return $this;
-    }
 }

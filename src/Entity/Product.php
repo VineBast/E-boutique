@@ -5,7 +5,10 @@ namespace App\Entity;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\ORM\Mapping as ORM;
+use PhpParser\Node\Scalar\String_;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
@@ -20,8 +23,7 @@ class Product
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=CommandLine::class, inversedBy="products")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="string", length=40)
      */
     private $NumProduct;
 
@@ -51,7 +53,7 @@ class Product
     private $Category;
 
     /**
-     * @ORM\OneToMany(targetEntity=Media::class, mappedBy="Name")
+     * @ORM\OneToMany(targetEntity=Media::class, mappedBy="NumProduct")
      */
     private $media;
 
@@ -65,15 +67,19 @@ class Product
         return $this->id;
     }
 
-    public function getNumProduct(): ?CommandLine
+    public function __toString() :string
+    {
+        return $this->getNumProduct();
+    }
+
+    public function getNumProduct(): ?string
     {
         return $this->NumProduct;
     }
 
-    public function setNumProduct(?CommandLine $NumProduct): self
+    public function setNumProduct(string $NumProduct): self
     {
         $this->NumProduct = $NumProduct;
-
         return $this;
     }
 
@@ -138,11 +144,19 @@ class Product
     }
 
     /**
-     * @return Collection<int, Media>
+     * @return String
      */
-    public function getMedia(): Collection
+    public function getMedia(): String
     {
-        return $this->media;
+        return $this->media->first()->getPath();
+    }
+
+    /**
+     * @return String
+     */
+    public function getAltMedia() : String
+    {
+        return $this->media->first()->getAlt();
     }
 
     public function addMedium(Media $medium): self
@@ -159,11 +173,42 @@ class Product
     {
         if ($this->media->removeElement($medium)) {
             // set the owning side to null (unless already changed)
-            if ($medium->getName() === $this) {
-                $medium->setName(null);
+            if ($medium->getNumProduct() === $this) {
+                $medium->setNumProduct(null);
             }
         }
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+            $product->setNumProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        if ($this->products->removeElement($product)) {
+            // set the owning side to null (unless already changed)
+            if ($product->getNumProduct() === $this) {
+                $product->setNumProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

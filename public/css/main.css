@@ -1,0 +1,26 @@
+/*
+MAIN CSS
+*/
+:root {
+    --main-color-green : #7FBC47;
+}
+
+.main-background-color {
+    background-color: var(--main-color-green);
+}
+
+.main-text-color {
+    color : var(--main-color-green);
+}
+
+.width-20 {
+    width: 20%;
+}
+
+.width-25 {
+    width: 25%;
+}
+
+.width-40 {
+    width: 40%;
+}
